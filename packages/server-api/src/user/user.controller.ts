@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -13,18 +13,27 @@ export class UserController {
   @ApiOperation({
     summary:"新增用户"
   })
-  // @ApiBearerAuth()
-  // @ApiResponse()
+  @ApiBearerAuth()   //鉴权
+   @ApiResponse({
+    status: HttpStatus.CREATED,
+    type:CreateUserDto
+   })
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
   @Get()
+  @ApiOperation({
+    summary:"获取所有用户"
+  })
   findAll() {
     return this.userService.findAll();
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary:"根据ID查询用户"
+  })
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
