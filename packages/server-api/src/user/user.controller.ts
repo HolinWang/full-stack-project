@@ -7,6 +7,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 @Controller('users')
 @ApiTags('用户管理')
 export class UserController {
+  // userService: UserService nest会自动注入
   constructor(private readonly userService: UserService) {}
 
   @Post()

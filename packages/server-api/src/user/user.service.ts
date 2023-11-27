@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
+//  可注入的  @Injectable()
 @Injectable()
 export class UserService {
   create(createUserDto: CreateUserDto) {
