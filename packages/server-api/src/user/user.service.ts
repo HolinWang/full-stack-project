@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SystemService } from 'src/shared/system.service';
@@ -10,7 +10,8 @@ export class UserService {
 
 
   create(createUserDto: CreateUserDto) {
-    console.log("ENV",this.systemService.getEnv())
+    console.log("ENV",this.systemService.getEnv());
+    throw new HttpException("新增失败,自定义异常冲突",HttpStatus.CONFLICT);
     return 'This action adds a new user';
   }
 
