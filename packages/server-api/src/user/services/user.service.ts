@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from '../dtos/create-user.dto';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 import { SystemService } from 'src/shared/system.service';
 import { ConfigService } from '@nestjs/config';
 import { MongoRepository } from 'typeorm';
-import { User } from './entities/user.mongo.entity';
+import { User } from '../entities/user.mongo.entity';
 import { AppLogger } from 'src/shared/logger/logger.service';
 
 //  可注入的  @Injectable()
