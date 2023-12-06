@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Query } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { PaginationParams2Dto } from 'src/shared/dtos/paginaation-params.dto';
 
 @Controller('users')
 @ApiTags('用户管理')
@@ -23,13 +24,6 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Get()
-  @ApiOperation({
-    summary:"获取所有用户"
-  })
-  findAll() {
-    return this.userService.findAll();
-  }
 
   @Get(':id')
   @ApiOperation({
@@ -47,5 +41,19 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
+  }
+
+  @Get('')
+  @ApiOperation({
+    summary:"查询所有用户"
+  })
+  async findAll(
+    @Query() query: PaginationParams2Dto  // 新增
+  ) {
+    const { data, count } = await this.userService.findAll(query);
+    return {
+      data,
+      meta: { total: count }
+    }
   }
 }

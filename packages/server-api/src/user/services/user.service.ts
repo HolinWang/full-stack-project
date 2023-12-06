@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { MongoRepository } from 'typeorm';
 import { User } from '../entities/user.mongo.entity';
 import { AppLogger } from 'src/shared/logger/logger.service';
+import { PaginationParams2Dto } from 'src/shared/dtos/paginaation-params.dto';
 
 //  可注入的  @Injectable()
 @Injectable()
@@ -33,9 +34,22 @@ export class UserService {
     // return 'This action adds a new user';
   }
 
-  findAll() {
-    this.logger.log(null,'user find all')
-    return this.userRepository.findAndCount();
+  // findAll() {
+  //   this.logger.log(null,'user find all')
+  //   return this.userRepository.findAndCount();
+  // }
+
+  async findAll({ pageSize, page }: PaginationParams2Dto): Promise<{ data: User[], count: number }> {
+    const [data, count] = await this.userRepository.findAndCount({
+      // 根据id排序
+      order: { _id: 'DESC' },  
+      skip: (page - 1) * pageSize,
+      take: (pageSize * 1),
+      cache: true,
+    })
+    return {
+      data, count
+    }
   }
 
   findOne(id: number) {
