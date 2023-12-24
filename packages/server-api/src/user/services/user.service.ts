@@ -7,6 +7,7 @@ import { MongoRepository } from 'typeorm';
 import { User } from '../entities/user.mongo.entity';
 import { AppLogger } from 'src/shared/logger/logger.service';
 import { PaginationParams2Dto } from 'src/shared/dtos/paginaation-params.dto';
+import { encryptPassword, makeSalt } from 'src/shared/utils/cryptogram.util';
 
 //  可注入的  @Injectable()
 @Injectable()
@@ -23,7 +24,13 @@ export class UserService {
     }
 
 
-  create(createUserDto: CreateUserDto) {
+  create(user: CreateUserDto) {
+
+    if(user.password){
+      const {salt,hashPassword} = this.getPassWord(user.password);
+      user.salt = salt;
+      user.password = hashPassword;
+    }
     this.logger.log(null,'user create')
     return this.userRepository.save({
       name:"Holin Wang",
@@ -62,5 +69,11 @@ export class UserService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  getPassWord(password){
+    const salt = makeSalt();
+    const hashPassword = encryptPassword(password,salt);
+    return {salt,hashPassword}
   }
 }
